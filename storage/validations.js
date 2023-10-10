@@ -12,7 +12,7 @@ export const validationObject = ({attributes, obj={}})=>{
 
         if(!(key in obj)) return { status: 400, message: `Por favor ingrese ${key}.` };
 
-        let keysArrays = ["telefonos", "correos", "socials", "hobbies", "experiences", "skills"];
+        let keysArrays = ["telefonos", "correos", "socials", "hobbies", "experiences", "skills", "idiomas"];
         let error = false;
         let tipoError = "";
 

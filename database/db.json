@@ -32,6 +32,10 @@
         "Python",
         "C++"
       ],
+      "idiomas": [
+        "Español", 
+        "Ingles"
+      ],
       "imgs": "https://media.gq.com.mx/photos/609c0fdeee4372271f0b9056/1:1/w_2000,h_2000,c_limit/salir%20guapo%20en%20fotos-605380757.jpg",
       "id": 1
     },
@@ -66,6 +70,10 @@
         "Java",
         "Python",
         "C++"
+      ],
+      "idiomas": [
+        "Español", 
+        "Ingles"
       ],
       "imgs": "https://media.gq.com.mx/photos/609c0fdeee4372271f0b9056/1:1/w_2000,h_2000,c_limit/salir%20guapo%20en%20fotos-605380757.jpg",
       "id": 2
