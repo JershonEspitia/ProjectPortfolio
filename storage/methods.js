@@ -1,5 +1,5 @@
 import url from "./config.js";
-import { validationObject, validarId } from "./validations.js";
+import { validationObject } from "./validations.js";
 
 
 const config = {
@@ -15,12 +15,19 @@ const methods = {
   put: "PUT",
 };
 
-export const getOne = async ({endPoint, id}) => {
+export const getOne = async ({endPoint, cedula}) => {
   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
-  if(!id || id.includes(" ")) return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${id}" ` };
+  if(!cedula || typeof(cedula) != "number") return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${cedula}" ` };
+   
   config.method = methods.get;
-  let res = await (await fetch(`${url}${endPoint}${id}`, config)).json();
-  console.log("RESSS: ",res);
+  let resAll = await (await fetch(`${url}${endPoint}`, config)).json();
+
+  let getId = 0;
+  resAll.forEach(element => {
+    if(cedula === element.cedula) getId = element.id;
+  });
+
+  let res = await (await fetch(`${url}${endPoint}${getId}`, config)).json();
   return res;
 };
 
@@ -31,34 +38,34 @@ export const getAll = async ({endPoint}) => {
   return res;
 };
 
-export const getRelations = async ({endPoint}) => { 
-  if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
+// export const getRelations = async ({endPoint}) => { 
+//   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
   
-  const arrayIds = ["autorId", "categoriaId", "editorialId", "estadoId", "usuarioId", "libroId"];
+//   const arrayIds = ["autorId", "categoriaId", "editorialId", "estadoId", "usuarioId", "libroId"];
   
-  config.method = methods.get;
-  let resOne = await (await fetch(`${url}${endPoint}`, config)).json();
+//   config.method = methods.get;
+//   let resOne = await (await fetch(`${url}${endPoint}`, config)).json();
 
-  let newUrl = url + "/" + endPoint.split("/")[1];
+//   let newUrl = url + "/" + endPoint.split("/")[1];
 
-  for(const key in resOne[0]) { 
-    if(arrayIds.includes(key)) {
-      if(newUrl.includes("?")){
-        newUrl += `&_expand=${key.split("I")[0]}`;
-      } else {
-        newUrl += `?_expand=${key.split("I")[0]}`;
-      };
-    };
-  };
+//   for(const key in resOne[0]) { 
+//     if(arrayIds.includes(key)) {
+//       if(newUrl.includes("?")){
+//         newUrl += `&_expand=${key.split("I")[0]}`;
+//       } else {
+//         newUrl += `?_expand=${key.split("I")[0]}`;
+//       };
+//     };
+//   };
 
-  config.method = methods.get;
-  let res = await (await fetch(`${newUrl}`, config)).json();
-  return res;
-};
+//   config.method = methods.get;
+//   let res = await (await fetch(`${newUrl}`, config)).json();
+//   return res;
+// };
 
 export const deleteOne = async ({endPoint, id}) => {
   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
-  if(!id || id.includes(" ")) return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${id}" ` };
+  if(!id || typeof(id) != "number") return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${id}" ` };
   
   if (typeof id !== "number")
     return { status: 400, message: `El dato ${id} no cumple con el formato` };
@@ -74,10 +81,7 @@ export const postAll = async ({endPoint, attributes, obj}) => {
   const body = validationObject({attributes, obj});
   if(body.status) return body
 
-  let isOk = await validarId({body, url});
-  if(isOk.status) { return isOk.message }
-
-  if (isOk === true) {
+  if (body) {
     config.method = methods.post;
     config.body = JSON.stringify(body);
     let res = await (await fetch(`${url}${endPoint}`, config)).json();
@@ -89,25 +93,22 @@ export const postAll = async ({endPoint, attributes, obj}) => {
   
 };
 
-export const putOne = async ({endPoint, attributes, obj}) => {
+export const putOne = async ({endPoint, attributes, obj, id}) => {
   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
   if(!attributes || Object.keys(attributes).length === 0) return { status: 400, message: `Por favor ingrese los atributos. valor: "${attributes}" ` };
-  if(!obj.id) return { status: 400, message: `Por favor ingrese el id` };
+  if(!id || typeof(id) != "number") return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${id}" ` };
 
-  const body = validationObject({attributes, obj, method: methods.put});
+  const body = validationObject({attributes, obj});
   if(body.status) { console.log(body) }
 
-  let isOk = await validarId({body, url});
-  if(isOk.status) { console.log(isOk) }
+  let isOk = await (await fetch(`${url}${endPoint}${id}`, config)).json();
+  if(!isOk.id) return { status: 400, message: `El id ${id} NO existe.`}
 
-  if (isOk === true) {
-    let resAct = await (await fetch(`${url}${endPoint}${obj.id}`)).json(); 
-
-    let newData = {...resAct, ...body}
-
+  if (isOk) {
     config.method = methods.put;
-    config.body = JSON.stringify(newData);
-    let res = await (await fetch(`${url}${endPoint}${obj.id}`, config)).json();
+    config.body = JSON.stringify(body);
+    let res = await (await fetch(`${url}${endPoint}${id}`, config)).json();
+    console.log("Actualizacion exitosa.");
     return res;
   } else {
     return "No se pudo realizar el PUT";

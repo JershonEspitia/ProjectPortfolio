@@ -1,3 +1,74 @@
 {
-    "profiles": []
+  "profiles": [
+    {
+      "name": "Jershon",
+      "cedula": 1232888181,
+      "fechaNacimiento": "1997-05-01",
+      "ciudad": "Bucaramanga",
+      "telefonos": [
+        3172660389,
+        6459875
+      ],
+      "correos": [
+        "jershonespitiarey@gmail.com",
+        "jershonespitiarey2@gmail.com"
+      ],
+      "socials": [
+        "https://github.com/JershonEspitia/",
+        "https://github.com/JershonEspitia/"
+      ],
+      "about": "Esta es la descripcion de mi perfil",
+      "hobbies": [
+        "Futbol",
+        "Basketball",
+        "videojuegos"
+      ],
+      "experiences": [
+        "Gerente - AMB",
+        "Jefe infraestructura - UNE"
+      ],
+      "skills": [
+        "Java",
+        "Python",
+        "C++"
+      ],
+      "imgs": "https://media.gq.com.mx/photos/609c0fdeee4372271f0b9056/1:1/w_2000,h_2000,c_limit/salir%20guapo%20en%20fotos-605380757.jpg",
+      "id": 1
+    },
+    {
+      "name": "Santiago",
+      "cedula": 1098764527,
+      "fechaNacimiento": "1980-10-10",
+      "ciudad": "Santa Marta",
+      "telefonos": [
+        3187653399,
+        6098765
+      ],
+      "correos": [
+        "camilo@gmail.com",
+        "camilo2@gmail.com"
+      ],
+      "socials": [
+        "https://github.com/camilo",
+        "https://github.com/camilo"
+      ],
+      "about": "Esta es la descripcion de mi perfil",
+      "hobbies": [
+        "Futbol",
+        "Basketball",
+        "videojuegos"
+      ],
+      "experiences": [
+        "Gerente - AMB",
+        "Jefe infraestructura - UNE"
+      ],
+      "skills": [
+        "Java",
+        "Python",
+        "C++"
+      ],
+      "imgs": "https://media.gq.com.mx/photos/609c0fdeee4372271f0b9056/1:1/w_2000,h_2000,c_limit/salir%20guapo%20en%20fotos-605380757.jpg",
+      "id": 2
+    }
+  ]
 }
