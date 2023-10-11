@@ -64,17 +64,20 @@ export const getAll = async ({endPoint}) => {
 // };
 
 export const deleteOne = async ({endPoint, id}) => {
+  console.log("asd",typeof(id), endPoint);
+
   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
-  if(!id || typeof(id) != "number") return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${id}" ` };
+  if(!id || typeof(id) !== "number") return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${id}" ` };
   
   if (typeof id !== "number")
     return { status: 400, message: `El dato ${id} no cumple con el formato` };
   config.method = methods.del;
   let res = await (await fetch(`${url}${endPoint}${id}`, config)).json();
-  return res;
+  return "Perfil eliminado.";
 };
 
 export const postAll = async ({endPoint, attributes, obj}) => {
+  console.log(endPoint, attributes, obj);
   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };  
   if(!attributes || Object.keys(attributes).length === 0) return { status: 400, message: `Por favor ingrese los atributos. valor: "${attributes}" ` };
 
@@ -85,8 +88,7 @@ export const postAll = async ({endPoint, attributes, obj}) => {
     config.method = methods.post;
     config.body = JSON.stringify(body);
     let res = await (await fetch(`${url}${endPoint}`, config)).json();
-    console.log("Registro exitoso.");
-    return res;
+    return "Registro exitoso.";
   } else {
     return "No se pudo realizar el POST";
   } 

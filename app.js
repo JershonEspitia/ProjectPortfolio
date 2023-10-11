@@ -15,7 +15,9 @@ addEventListener("DOMContentLoaded", () => {
 
   btnRegistrar.addEventListener("click", () => {
     functFormulario({contenidoMain, migaPan});
-    addCampo();
+    functAddField();
+    functBtnSubmit();
+    functTable(contenidoMain);
   });
   
 });
@@ -26,54 +28,54 @@ let functFormulario = ({contenidoMain, migaPan}) => {
   contenidoMain.insertAdjacentHTML(
     "beforeend",
     `<div class="card">
-              <form>
+              <form id="myForm">
               <fieldset>
                 <legend>Registrar Portafolio</legend> 
 
                 <!--NOMBRE -->
                 <div>
                   <label>Nombre</label>
-                  <input type="text" id="name" required>
+                  <input type="text" name="name" required>
                 </div>
 
                 <!--CEDULA -->
                 <div>
                   <label>Cedula</label>
-                  <input type="number" id="cedula" required>
+                  <input type="number" name="cedula" required>
                 </div>
                 
                 <!-- FECHA NACIMIENTO -->
                 <div>
                   <label>Fecha Nacimiento</label>
-                  <input type="date" id="fechaNacimiento" required>
+                  <input type="date" name="fechaNacimiento" required>
                 </div>
 
                 <!--CIUDAD -->
                 <div>
                   <label>Ciudad</label>
-                  <input type="text" id="ciudad" required>
+                  <input type="text" name="ciudad" required>
                 </div>
 
                 <!-- TELEFONOS -->
                 <div>
-                  <label>Telefono</label>
-                  <input type="tel" name="telefonos" required></input>
+                  <label>Telefono (Ingresa 1 por campo)</label>
+                  <input type="number" class="telefono" name="telefonos" required></input>
                 </div>
                 <!-- Button -->
                 <input id="btnTelefono" class="favorite styled" type="button" value="(+) Telefono" />
 
                 <!-- CORREO -->
                 <div>
-                  <label>Correo</label>
-                  <input type="email" name="correos" required>
+                  <label>Correo (Ingresa 1 por campo)</label>
+                  <input type="email" class="correo" name="correos" required>
                 </div>
                 <!-- Button -->
                 <input id="btnCorreo" class="favorite styled" type="button" value="(+) Email" />
 
                 <!--SOCIALS -->
                 <div>
-                  <label>Redes Sociales</label>
-                  <input type="url" name="socials" placeholder="Link red social" required>
+                  <label>Redes Sociales (Ingresa 1 por campo)</label>
+                  <input type="url" class="social" name="socials" placeholder="Link red social" required>
                 </div>
                 <!-- Button -->
                 <input id="btnSocial" class="favorite styled" type="button" value="(+) Social" />
@@ -81,50 +83,56 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <!--ABOUT -->
                 <div>
                   <label>Sobre mi</label>
-                  <textarea id="about" rows="4" cols="50" required></textarea>
+                  <textarea name="about" rows="4" cols="50" required></textarea>
                 </div>
 
                 <!--HOBBIES -->
                 <div>
-                  <label>Hobbie</label>
-                  <input type="text" name="hobbies" required>
+                  <label>Hobbie (Ingresa 1 por campo)</label>
+                  <input type="text" class="hobbies" name="hobbies" required>
                 </div>
                 <!-- Button -->
                 <input id="btnHobbie" class="favorite styled" type="button" value="(+) Hobbie" />
 
                 <!--EXPERIENCES -->
                 <div>
-                  <label>Experiencia</label>
-                  <input type="text" name="experiences" required>
+                  <label>Experiencia (Ingresa 1 por campo)</label>
+                  <input type="text" class="experience "name="experiences" required>
                 </div>
                 <!-- Button -->
                 <input id="btnExperience" class="favorite styled" type="button" value="(+) Experiencia" />
 
                 <!--SKILLS -->
                 <div>
-                  <label>Skill</label>
-                  <input type="text" name="skills" required>
+                  <label>Skill/Lenguaje de programacion (Ingresa 1 por campo)</label>
+                  <input type="text" class="skill" name="skills" required>
                 </div>
                 <!-- Button -->
                 <input id="btnSkill" class="favorite styled" type="button" value="(+) Skill" />
 
                 <!--IDIOMA -->
                 <div>
-                  <label>Idioma</label>
-                  <input type="text" name="idiomas" required>
+                  <label>Idioma (Ingresa 1 por campo)</label>
+                  <input type="text" class="idioma" name="idiomas" required>
                 </div>
                 <!-- Button -->
                 <input id="btnIdioma" class="favorite styled" type="button" value="(+) Idioma" />
                 
+                <!--IMAGEN -->
+                <div>
+                  <label>Imagen</label>
+                  <input type="url" name="imgs" required>
+                </div>
+
                 <!-- Button -->
-                <button>REGISTRAR</button>
+                <button id="btnSubmit" type="submit">REGISTRAR</button>
               </fieldset>
             </form>
           </div>`
     );
 };
 
-let addCampo = () => {
+let functAddField = () => {
   let btnTelefono = document.querySelector("#btnTelefono")
   let btnCorreo = document.querySelector("#btnCorreo")
   let btnSocial = document.querySelector("#btnSocial")
@@ -133,86 +141,190 @@ let addCampo = () => {
   let btnSkill = document.querySelector("#btnSkill")
   let btnIdioma = document.querySelector("#btnIdioma")
 
+  let numTele = 1;
+  let numCorreo = 1;
+  let numSocial = 1;
+  let numHobbie = 1;  
+  let numExperience = 1;
+  let numSkill = 1;
+  let numIdioma = 1;
+
   btnTelefono.addEventListener("click", () => {
     btnTelefono.insertAdjacentHTML(
       "beforebegin",
       `<div>
-          <input type="tel" name="telefonos" required></input>
-        </div>`
+      <input type="number" class="telefono" name="telefonos/${numTele}" required></input>
+      </div>`
     );
+    numTele++;
   });
   btnCorreo.addEventListener("click", () => {
     btnCorreo.insertAdjacentHTML(
       "beforebegin",
       `<div>
-          <input type="email" name="correos" required>
-        </div>`
+      <input type="email" class="correo" name="correos/${numCorreo}" required>
+      </div>`
     );
+    numCorreo++;
   });
   btnSocial.addEventListener("click", () => {
     btnSocial.insertAdjacentHTML(
       "beforebegin",
       `<div>
-          <input type="url" name="socials" placeholder="Link red social" required>
-        </div>`
+      <input type="url" class="social" name="socials/${numSocial}" placeholder="Link red social" required>
+      </div>`
     );
+    numSocial++;  
   });
   btnHobbie.addEventListener("click", () => {
     btnHobbie.insertAdjacentHTML(
       "beforebegin",
       `<div>
-          <input type="text" name="hobbies" required>
-        </div>`
+      <input type="text" class="hobbies" name="hobbies/${numHobbie}" required>
+      </div>`
     );
+    numHobbie++;
   });
   btnExperience.addEventListener("click", () => {
     btnExperience.insertAdjacentHTML(
       "beforebegin",
       `<div>
-          <input type="text" name="experiences" required>
-        </div>`
+      <input type="text" class="experience "name="experiences/${numExperience}" required>
+      </div>`
     );
+    numExperience++;
   });
   btnSkill.addEventListener("click", () => {
     btnSkill.insertAdjacentHTML(
       "beforebegin",
       `<div>
-          <input type="text" name="skills" required>
-        </div>`
+      <input type="text" class="skill" name="skills/${numSkill}" required>
+      </div>`
     );
+    numSkill++; 
   });
   btnIdioma.addEventListener("click", () => {
     btnIdioma.insertAdjacentHTML(
       "beforebegin",
       `<div>
-            <input type="text" name="idiomas" required>
-        </div>`
+      <input type="text" class="idioma" name="idiomas/${numIdioma}" required>
+      </div>`
     );
+    numIdioma++;    
   });
 };
 
-{
-  /* <div class="data">
-    <div class="content-data">
-        <div class="head">
-            <h3>Sales Report</h3>
-        </div>
-        <!-- conteido -->
-        <h1>Hola Mundo</h1>
-    </div>
-</div>
+let functBtnSubmit = () => {
+    let myForm = document.querySelector("#myForm"); 
 
-<div class="info-data">
-<div class="card">
-    <div class="head">
-        <div>
-            <h2>1500</h2>
-            <p>Traffic</p>
-        </div>
-        <i class='bx bx-trending-up icon' ></i>
+    myForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      let objForm = Object.fromEntries(new FormData(e.target));
+
+      let obj = {};
+      let values = ["telefonos", "correos", "socials", "hobbies", "experiences", "skills", "idiomas"];
+
+      values.forEach(element => {
+        obj[element] = []
+      });
+
+      for(let key in objForm) {
+
+        if(key.includes("name")) obj[key] = objForm[key]
+        else if(key.includes("cedula")) obj[key] = objForm[key]
+        else if(key.includes("ciudad")) obj[key] = objForm[key]
+        else if(key.includes("about")) obj[key] = objForm[key]
+        else if(key.includes("imgs")) obj[key] = objForm[key]
+        else if(key.includes("fechaNacimiento")) obj[key] = objForm[key]
+        else if(values.includes(key.split("/")[0])){
+          if(key.split("/")){
+            obj[key.split("/")[0]].push(objForm[key])
+          } else {
+            obj[key] = objForm[key]
+          }
+        }
+      };
+
+
+      let buttonSubmit = document.querySelector("#btnSubmit");
+      console.log(buttonSubmit);
+
+      if(!buttonSubmit.class){
+        console.log("ENTRA EN POST")
+        let res = await postAll({ endPoint, attributes, obj });
+        return alert(res);
+      };
+    });
+};
+
+let functTable = async(contenidoMain) => {
+
+  contenidoMain.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="card">
+      <h1>PORTAFOLIOS</h1>
+      <div>
+      <input id="searchInput" type="number" placeholder="Ingrese la cedula" >
+      <input id="btnSearch" class="favorite styled" type="button" value="BUSCAR" />
+      </div>
+      <table class="rwd-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cedula</th>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Correo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="myTabla">
+        </tbody>
+      </table>
     </div>
-    <span class="progress" data-value="40%"></span>
-    <span class="label">40%</span>
-</div>
-</div> */
-}
+    `
+  );
+
+  let myTabla = document.querySelector('#myTabla');
+  let profiles = await getAll({endPoint});
+  profiles = profiles.map(
+    (res) =>
+      ` 
+      <tr>
+          <td>${res.id}</td>
+          <td>${res.cedula}</td>
+          <td>${res.name}</td>
+          <td>${res.telefonos[0]}</td>
+          <td>${res.correos[0]}</td>
+          <td id="groupBtn">
+            <input id="${res.id}" class="favorite styled btnRender" type="button" value="MOSTRAR" />
+            <input id="${res.id}" class="favorite styled btnEditar" type="button" value="EDITAR" />
+            <input id="${res.id}" class="favorite styled btnEliminar" type="button" value="ELIMINAR" />
+          </td>
+      </tr>
+      `
+  ); 
+  myTabla.insertAdjacentHTML(
+    "beforeend",
+    `${profiles.join("")}`
+  );
+
+  functDelete();
+};
+
+let functDelete = () => {
+  let btnDelete = document.querySelectorAll(".btnEliminar");
+
+  btnDelete.forEach(element => {
+    element.addEventListener("click", async () => {
+      let id = element.id;
+      id = Number(id);
+      let res = await deleteOne({endPoint, id});
+      if (res.message) return alert(res.message)
+      else return alert(res)
+    });
+  });
+  
+};

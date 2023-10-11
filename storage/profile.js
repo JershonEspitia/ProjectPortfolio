@@ -1,9 +1,9 @@
 export const attributes = {
     "name": "string",
-    "cedula": "number",
+    "cedula": "string",
     "fechaNacimiento": "date",
     "ciudad": "string",
-    "telefonos": "number",
+    "telefonos": "string",
     "correos": "string", 
     "socials": "string",
     "about": "string",
