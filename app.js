@@ -57,7 +57,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 </div>
 
                 <!-- TELEFONOS -->
-                <div>
+                <div id="groupTel">
                   <label>Telefono (Ingresa 1 por campo)</label>
                   <input type="number" class="telefono" name="telefonos" required></input>
                 </div>
@@ -65,7 +65,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <input id="btnTelefono" class="favorite styled" type="button" value="(+) Telefono" />
 
                 <!-- CORREO -->
-                <div>
+                <div id="groupCorreo">
                   <label>Correo (Ingresa 1 por campo)</label>
                   <input type="email" class="correo" name="correos" required>
                 </div>
@@ -73,7 +73,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <input id="btnCorreo" class="favorite styled" type="button" value="(+) Email" />
 
                 <!--SOCIALS -->
-                <div>
+                <div id="groupSocials">
                   <label>Redes Sociales (Ingresa 1 por campo)</label>
                   <input type="url" class="social" name="socials" placeholder="Link red social" required>
                 </div>
@@ -87,7 +87,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 </div>
 
                 <!--HOBBIES -->
-                <div>
+                <div id="groupHobbies">
                   <label>Hobbie (Ingresa 1 por campo)</label>
                   <input type="text" class="hobbies" name="hobbies" required>
                 </div>
@@ -95,7 +95,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <input id="btnHobbie" class="favorite styled" type="button" value="(+) Hobbie" />
 
                 <!--EXPERIENCES -->
-                <div>
+                <div id="groupExperiences">
                   <label>Experiencia (Ingresa 1 por campo)</label>
                   <input type="text" class="experience "name="experiences" required>
                 </div>
@@ -103,7 +103,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <input id="btnExperience" class="favorite styled" type="button" value="(+) Experiencia" />
 
                 <!--SKILLS -->
-                <div>
+                <div id="groupSkills">
                   <label>Skill/Lenguaje de programacion (Ingresa 1 por campo)</label>
                   <input type="text" class="skill" name="skills" required>
                 </div>
@@ -111,7 +111,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <input id="btnSkill" class="favorite styled" type="button" value="(+) Skill" />
 
                 <!--IDIOMA -->
-                <div>
+                <div id="groupIdiomas">
                   <label>Idioma (Ingresa 1 por campo)</label>
                   <input type="text" class="idioma" name="idiomas" required>
                 </div>
@@ -150,79 +150,87 @@ let functAddField = () => {
   let numIdioma = 1;
 
   btnTelefono.addEventListener("click", () => {
+    let div = document.querySelector("#groupTel");
     if(numTele < 3){
-      btnTelefono.insertAdjacentHTML(
-      "beforebegin",
-      `<div>
+      div.insertAdjacentHTML(
+      "beforeend",
+      `
       <input type="number" class="telefono" name="telefonos/${numTele}" required></input>
-      </div>`
+      `
       );
       numTele++;
     }
   });
   btnCorreo.addEventListener("click", () => {
+    let div = document.querySelector("#groupCorreo");
     if(numCorreo < 3){
-      btnCorreo.insertAdjacentHTML(
-      "beforebegin",
-      `<div>
+      div.insertAdjacentHTML(
+      "beforeend",
+      `
       <input type="email" class="correo" name="correos/${numCorreo}" required>
-      </div>`
+      `
       );
       numCorreo++;
     }
   });
   btnSocial.addEventListener("click", () => {
+    let div = document.querySelector("#groupSocials");
     if(numSocial < 3){
-      btnSocial.insertAdjacentHTML(
-      "beforebegin",
-      `<div>
+      div.insertAdjacentHTML(
+      "beforeend",
+      `
       <input type="url" class="social" name="socials/${numSocial}" placeholder="Link red social" required>
-      </div>`
+      `
       );
       numSocial++; 
     }
   });
   btnHobbie.addEventListener("click", () => {
+    let div = document.querySelector("#groupHobbies");
     if(numHobbie < 3){
-      btnHobbie.insertAdjacentHTML(
-      "beforebegin",
-      `<div>
+      div.insertAdjacentHTML(
+      "beforeend",
+      `
       <input type="text" class="hobbies" name="hobbies/${numHobbie}" required>
-      </div>`
+      `
       );
       numHobbie++;
     }
   });
   btnExperience.addEventListener("click", () => {
-    if(btnExperience < 3){
-      btnExperience.insertAdjacentHTML(
-      "beforebegin",
-      `<div>
+    let div = document.querySelector("#groupExperiences");
+    if(numExperience < 3){
+      div.insertAdjacentHTML(
+      "beforeend",
+      `
       <input type="text" class="experience "name="experiences/${numExperience}" required>
-      </div>`
+      `
       );
       numExperience++;
     }
   });
   btnSkill.addEventListener("click", () => {
+    let div = document.querySelector("#groupSkills");
     if(numSkill < 3){
-      btnSkill.insertAdjacentHTML(
-      "beforebegin",
-      `<div>
+      div.insertAdjacentHTML(
+      "beforeend",
+      `
       <input type="text" class="skill" name="skills/${numSkill}" required>
-      </div>`
+      `
       );
       numSkill++; 
     }
     
   });
   btnIdioma.addEventListener("click", () => {
+    let div = document.querySelector("#groupIdiomas");
+
     if(numIdioma < 3){
-      btnIdioma.insertAdjacentHTML(
-      "beforebegin",
-      `<div>
+      div.insertAdjacentHTML(
+      "beforeend",
+      `
       <input type="text" class="idioma" name="idiomas/${numIdioma}" required>
-      </div>`
+      `
       );
       numIdioma++;  
     }
@@ -410,5 +418,31 @@ let llenarForm = (res) => {
   let cedula = document.querySelector("input[name=cedula]");
   cedula.value = res.cedula
 
+  let fechaNacimiento = document.querySelector("input[name=fechaNacimiento");
+  fechaNacimiento.value = res.fechaNacimiento
 
+  let ciudad = document.querySelector("input[name=ciudad]");
+  ciudad.value = res.ciudad
+
+  let telefono = document.querySelector("#groupTel");
+  telefono.innerHTML = "";
+  for(let i in res.telefonos){
+    i = Number(i);
+    if(i === 0) {
+      telefono.insertAdjacentHTML(
+        "beforeend",
+        `
+        <label>Telefono (Ingresa 1 por campo)</label>
+        <input type="number" class="telefono" name="telefonos" value="${res.telefonos[i]}" required></input>
+        `
+      )
+    } else {
+      telefono.insertAdjacentHTML(
+        "beforeend",
+        `
+        <input type="number" class="telefono" name="telefonos/${i}" value="${res.telefonos[i]}" required></input>
+        `
+      );
+    }
+  }
 };
