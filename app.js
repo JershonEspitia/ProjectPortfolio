@@ -317,7 +317,7 @@ let functTable = async(contenidoMain) => {
           <td>${res.correos[0]}</td>
           <td id="groupBtn">
             <input id="${res.id}" class="favorite styled btnRender" type="button" value="MOSTRAR" />
-            <input id="${res.id}" class="favorite styled btnEditar" type="button" value="EDITAR" />
+            <input id="${res.cedula}" class="favorite styled btnEditar" type="button" value="EDITAR" />
             <input id="${res.id}" class="favorite styled btnEliminar" type="button" value="ELIMINAR" />
           </td>
       </tr>
@@ -330,6 +330,7 @@ let functTable = async(contenidoMain) => {
 
   functDelete();
   functSearch(contenidoMain);
+  functEditar();
 };
 
 let functDelete = () => {
@@ -381,4 +382,33 @@ let functSearch = (contenidoMain) => {
   document.querySelector("#btnClear").addEventListener("click", async () => {
     window.location.reload();
   });
+};
+
+let functEditar = () => {
+  let btnEditar = document.querySelectorAll(".btnEditar");
+
+  btnEditar.forEach(element => {
+    element.addEventListener("click", async () => {
+      let btnSubmit = document.querySelector("#btnSubmit")
+      btnSubmit.setAttribute("class", "editar")
+
+      let cedula = element.id;
+      cedula = Number(cedula);
+      let res = await getOne({endPoint, cedula});
+      if (res.message) return alert(res.message)
+      else {
+        llenarForm(res);
+      }
+    });
+  });
+};
+
+let llenarForm = (res) => {
+  let nombre = document.querySelector("input[name=name]");
+  nombre.value = res.name;
+
+  let cedula = document.querySelector("input[name=cedula]");
+  cedula.value = res.cedula
+
+
 };
