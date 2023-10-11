@@ -16,19 +16,24 @@ const methods = {
 };
 
 export const getOne = async ({endPoint, cedula}) => {
-  if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
-  if(!cedula || typeof(cedula) != "number") return { status: 400, message: `Por favor ingrese el id o un id valido. valor: "${cedula}" ` };
+  if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido.` };
+  if(!cedula || typeof(cedula) !== "number") return { status: 400, message: `Por favor ingrese la cedula o una cedula valida.` };
    
   config.method = methods.get;
   let resAll = await (await fetch(`${url}${endPoint}`, config)).json();
 
-  let getId = 0;
+  let getId = -999;
   resAll.forEach(element => {
     if(cedula === element.cedula) getId = element.id;
   });
 
-  let res = await (await fetch(`${url}${endPoint}${getId}`, config)).json();
-  return res;
+  if(getId !== -999) {
+    let res = await (await fetch(`${url}${endPoint}${getId}`, config)).json();
+    return res;
+  } else {
+    return { status: 400, message: `La cedula no esta registrada. valor: "${cedula}" ` };
+  }
+  
 };
 
 export const getAll = async ({endPoint}) => {
@@ -88,7 +93,7 @@ export const postAll = async ({endPoint, attributes, obj}) => {
     config.method = methods.post;
     config.body = JSON.stringify(body);
     let res = await (await fetch(`${url}${endPoint}`, config)).json();
-    return "Registro exitoso.";
+    return "Perfil registrado.";
   } else {
     return "No se pudo realizar el POST";
   } 

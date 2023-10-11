@@ -150,67 +150,83 @@ let functAddField = () => {
   let numIdioma = 1;
 
   btnTelefono.addEventListener("click", () => {
-    btnTelefono.insertAdjacentHTML(
+    if(numTele < 3){
+      btnTelefono.insertAdjacentHTML(
       "beforebegin",
       `<div>
       <input type="number" class="telefono" name="telefonos/${numTele}" required></input>
       </div>`
-    );
-    numTele++;
+      );
+      numTele++;
+    }
   });
   btnCorreo.addEventListener("click", () => {
-    btnCorreo.insertAdjacentHTML(
+    if(numCorreo < 3){
+      btnCorreo.insertAdjacentHTML(
       "beforebegin",
       `<div>
       <input type="email" class="correo" name="correos/${numCorreo}" required>
       </div>`
-    );
-    numCorreo++;
+      );
+      numCorreo++;
+    }
   });
   btnSocial.addEventListener("click", () => {
-    btnSocial.insertAdjacentHTML(
+    if(numSocial < 3){
+      btnSocial.insertAdjacentHTML(
       "beforebegin",
       `<div>
       <input type="url" class="social" name="socials/${numSocial}" placeholder="Link red social" required>
       </div>`
-    );
-    numSocial++;  
+      );
+      numSocial++; 
+    }
   });
   btnHobbie.addEventListener("click", () => {
-    btnHobbie.insertAdjacentHTML(
+    if(numHobbie < 3){
+      btnHobbie.insertAdjacentHTML(
       "beforebegin",
       `<div>
       <input type="text" class="hobbies" name="hobbies/${numHobbie}" required>
       </div>`
-    );
-    numHobbie++;
+      );
+      numHobbie++;
+    }
   });
   btnExperience.addEventListener("click", () => {
-    btnExperience.insertAdjacentHTML(
+    if(btnExperience < 3){
+      btnExperience.insertAdjacentHTML(
       "beforebegin",
       `<div>
       <input type="text" class="experience "name="experiences/${numExperience}" required>
       </div>`
-    );
-    numExperience++;
+      );
+      numExperience++;
+    }
   });
   btnSkill.addEventListener("click", () => {
-    btnSkill.insertAdjacentHTML(
+    if(numSkill < 3){
+      btnSkill.insertAdjacentHTML(
       "beforebegin",
       `<div>
       <input type="text" class="skill" name="skills/${numSkill}" required>
       </div>`
-    );
-    numSkill++; 
+      );
+      numSkill++; 
+    }
+    
   });
   btnIdioma.addEventListener("click", () => {
-    btnIdioma.insertAdjacentHTML(
+    if(numIdioma < 3){
+      btnIdioma.insertAdjacentHTML(
       "beforebegin",
       `<div>
       <input type="text" class="idioma" name="idiomas/${numIdioma}" required>
       </div>`
-    );
-    numIdioma++;    
+      );
+      numIdioma++;  
+    }
+      
   });
 };
 
@@ -268,6 +284,7 @@ let functTable = async(contenidoMain) => {
       <div>
       <input id="searchInput" type="number" placeholder="Ingrese la cedula" >
       <input id="btnSearch" class="favorite styled" type="button" value="BUSCAR" />
+      <input id="btnClear" class="favorite styled" type="button" value="LIMPIAR" />
       </div>
       <table class="rwd-table">
         <thead>
@@ -312,6 +329,7 @@ let functTable = async(contenidoMain) => {
   );
 
   functDelete();
+  functSearch(contenidoMain);
 };
 
 let functDelete = () => {
@@ -326,5 +344,41 @@ let functDelete = () => {
       else return alert(res)
     });
   });
-  
+};
+
+let functSearch = (contenidoMain) => {
+  let btnSearch = document.querySelector("#btnSearch");
+
+  btnSearch.addEventListener("click", async () => {
+    let cedula = document.querySelector("#searchInput")
+    let myTabla = document.querySelector("#myTabla")
+    cedula = Number(cedula.value)
+
+    let profile = await getOne({endPoint, cedula});
+    if(profile.status) alert(profile.message)
+    else {
+      myTabla.innerHTML = ""
+      myTabla.insertAdjacentHTML(
+        "beforeend",
+        ` 
+        <tr>
+            <td>${profile.id}</td>
+            <td>${profile.cedula}</td>
+            <td>${profile.name}</td>
+            <td>${profile.telefonos[0]}</td>
+            <td>${profile.correos[0]}</td>
+            <td id="groupBtn">
+              <input id="${profile.id}" class="favorite styled btnRender" type="button" value="MOSTRAR" />
+              <input id="${profile.id}" class="favorite styled btnEditar" type="button" value="EDITAR" />
+              <input id="${profile.id}" class="favorite styled btnEliminar" type="button" value="ELIMINAR" />
+            </td>
+        </tr>
+        `
+      );
+    }
+  });
+
+  document.querySelector("#btnClear").addEventListener("click", async () => {
+    window.location.reload();
+  });
 };
