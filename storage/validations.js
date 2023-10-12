@@ -58,3 +58,17 @@ export const validationObject = ({attributes, obj={}})=>{
 
     return body;
 };
+
+export const validarCedula = ({resAll, cedula, id}) => {
+    console.log(cedula, id);
+
+    let cedulaExist = false;
+    resAll.forEach(element => {
+        console.log(typeof(element.cedula), element.cedula, typeof(element.id), element.id);
+
+        console.log(element.cedula === Number(cedula),element.id === id,!(element.cedula === Number(cedula) && element.id === id))
+        if(element.cedula === Number(cedula) && element.id === id) cedulaExist = false;
+        else if(element.cedula === Number(cedula)) cedulaExist = true;
+    });
+    return cedulaExist;
+};

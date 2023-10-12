@@ -1,5 +1,5 @@
 import url from "./config.js";
-import { validationObject } from "./validations.js";
+import { validationObject, validarCedula } from "./validations.js";
 
 
 const config = {
@@ -43,31 +43,6 @@ export const getAll = async ({endPoint}) => {
   return res;
 };
 
-// export const getRelations = async ({endPoint}) => { 
-//   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };
-  
-//   const arrayIds = ["autorId", "categoriaId", "editorialId", "estadoId", "usuarioId", "libroId"];
-  
-//   config.method = methods.get;
-//   let resOne = await (await fetch(`${url}${endPoint}`, config)).json();
-
-//   let newUrl = url + "/" + endPoint.split("/")[1];
-
-//   for(const key in resOne[0]) { 
-//     if(arrayIds.includes(key)) {
-//       if(newUrl.includes("?")){
-//         newUrl += `&_expand=${key.split("I")[0]}`;
-//       } else {
-//         newUrl += `?_expand=${key.split("I")[0]}`;
-//       };
-//     };
-//   };
-
-//   config.method = methods.get;
-//   let res = await (await fetch(`${newUrl}`, config)).json();
-//   return res;
-// };
-
 export const deleteOne = async ({endPoint, id}) => {
   console.log("asd",typeof(id), endPoint);
 
@@ -82,12 +57,15 @@ export const deleteOne = async ({endPoint, id}) => {
 };
 
 export const postAll = async ({endPoint, attributes, obj}) => {
-  console.log(endPoint, attributes, obj);
   if(!endPoint || endPoint.includes(" ")) return { status: 400, message: `Por favor ingrese el endPoint o un endPoint valido. valor: "${endPoint}" ` };  
   if(!attributes || Object.keys(attributes).length === 0) return { status: 400, message: `Por favor ingrese los atributos. valor: "${attributes}" ` };
 
   const body = validationObject({attributes, obj});
   if(body.status) return body
+
+  let resAll = await getAll({endPoint});
+  const isOkCc = validarCedula({resAll, cedula: body.cedula})
+  if(isOkCc) return { status: 400, message: `La cedula ${body.cedula} ya existe.`}
 
   if (body) {
     config.method = methods.post;
@@ -108,6 +86,10 @@ export const putOne = async ({endPoint, attributes, obj, id}) => {
   const body = validationObject({attributes, obj});
   if(body.status) { console.log(body) }
 
+  let resAll = await getAll({endPoint});
+  const isOkCc = validarCedula({resAll, cedula: body.cedula, id})
+  if(isOkCc) return { status: 400, message: `La cedula ${body.cedula} ya existe.`}
+
   let isOk = await (await fetch(`${url}${endPoint}${id}`, config)).json();
   if(!isOk.id) return { status: 400, message: `El id ${id} NO existe.`}
 
@@ -115,8 +97,7 @@ export const putOne = async ({endPoint, attributes, obj, id}) => {
     config.method = methods.put;
     config.body = JSON.stringify(body);
     let res = await (await fetch(`${url}${endPoint}${id}`, config)).json();
-    console.log("Actualizacion exitosa.");
-    return res;
+    return "Actualizacion exitosa.";
   } else {
     return "No se pudo realizar el PUT";
   }

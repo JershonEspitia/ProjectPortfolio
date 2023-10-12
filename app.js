@@ -75,7 +75,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <!--SOCIALS -->
                 <div id="groupSocials">
                   <label>Redes Sociales (Ingresa 1 por campo)</label>
-                  <input type="url" class="social" name="socials" placeholder="Link red social" required>
+                  <input type="url" class="sociall" name="socials" placeholder="Link red social" required>
                 </div>
                 <!-- Button -->
                 <input id="btnSocial" class="favorite styled" type="button" value="(+) Social" />
@@ -83,7 +83,7 @@ let functFormulario = ({contenidoMain, migaPan}) => {
                 <!--ABOUT -->
                 <div>
                   <label>Sobre mi</label>
-                  <textarea name="about" rows="4" cols="50" required></textarea>
+                  <textarea id="about" name="about" rows="4" cols="50" required></textarea>
                 </div>
 
                 <!--HOBBIES -->
@@ -179,7 +179,7 @@ let functAddField = () => {
       div.insertAdjacentHTML(
       "beforeend",
       `
-      <input type="url" class="social" name="socials/${numSocial}" placeholder="Link red social" required>
+      <input type="url" class="sociall" name="socials/${numSocial}" placeholder="Link red social" required>
       `
       );
       numSocial++; 
@@ -256,29 +256,34 @@ let functBtnSubmit = () => {
       for(let key in objForm) {
 
         if(key.includes("name")) obj[key] = objForm[key]
-        else if(key.includes("cedula")) obj[key] = objForm[key]
+        else if(key.includes("cedula")) obj[key] = Number(objForm[key])
         else if(key.includes("ciudad")) obj[key] = objForm[key]
         else if(key.includes("about")) obj[key] = objForm[key]
         else if(key.includes("imgs")) obj[key] = objForm[key]
         else if(key.includes("fechaNacimiento")) obj[key] = objForm[key]
         else if(values.includes(key.split("/")[0])){
           if(key.split("/")){
-            obj[key.split("/")[0]].push(objForm[key])
+            if(key.split("/")[0] === "telefonos") obj[key.split("/")[0]].push(Number(objForm[key]))
+            else obj[key.split("/")[0]].push(objForm[key])
           } else {
-            obj[key] = objForm[key]
+            if(key === "telefonos") obj[key] = Number(objForm[key])
+            else obj[key] = objForm[key]
           }
         }
       };
 
 
       let buttonSubmit = document.querySelector("#btnSubmit");
-      console.log(buttonSubmit);
 
-      if(!buttonSubmit.class){
-        console.log("ENTRA EN POST")
+      if(!buttonSubmit.getAttribute("class")){
         let res = await postAll({ endPoint, attributes, obj });
-        return alert(res);
-      };
+        if(res.status) return alert(res.message)
+        else return alert(res)
+      } else {
+        let res = await putOne({ endPoint, attributes, obj , id: Number(buttonSubmit.getAttribute("editId"))});
+        if(res.status) return alert(res.message)
+        else return alert(res)
+      }
     });
 };
 
@@ -324,7 +329,7 @@ let functTable = async(contenidoMain) => {
           <td>${res.telefonos[0]}</td>
           <td>${res.correos[0]}</td>
           <td id="groupBtn">
-            <input id="${res.id}" class="favorite styled btnRender" type="button" value="MOSTRAR" />
+            <input id="${res.id}" dataCc="${res.cedula}" class="favorite styled btnRender" type="button" value="MOSTRAR" />
             <input id="${res.cedula}" class="favorite styled btnEditar" type="button" value="EDITAR" />
             <input id="${res.id}" class="favorite styled btnEliminar" type="button" value="ELIMINAR" />
           </td>
@@ -339,6 +344,7 @@ let functTable = async(contenidoMain) => {
   functDelete();
   functSearch(contenidoMain);
   functEditar();
+  renderPortafolio();
 };
 
 let functDelete = () => {
@@ -396,13 +402,21 @@ let functEditar = () => {
   let btnEditar = document.querySelectorAll(".btnEditar");
 
   btnEditar.forEach(element => {
+
     element.addEventListener("click", async () => {
+
+      let migaPan = document.querySelector("#migaPan");
       let btnSubmit = document.querySelector("#btnSubmit")
+      migaPan.textContent = "Editar"
+      btnSubmit.textContent = "ACTUALIZAR"
       btnSubmit.setAttribute("class", "editar")
 
       let cedula = element.id;
       cedula = Number(cedula);
       let res = await getOne({endPoint, cedula});
+
+      btnSubmit.setAttribute("editId", res.id)
+
       if (res.message) return alert(res.message)
       else {
         llenarForm(res);
@@ -445,4 +459,312 @@ let llenarForm = (res) => {
       );
     }
   }
+
+  let correo = document.querySelector("#groupCorreo");
+  correo.innerHTML = "";
+  for(let i in res.correos){
+    i = Number(i);
+    if(i === 0) {
+      correo.insertAdjacentHTML(
+        "beforeend",
+        `
+        <label>Correo (Ingresa 1 por campo)</label>
+        <input type="email" class="correo" name="correos" value="${res.correos[i]}" required>
+        `
+      )
+    } else {
+      correo.insertAdjacentHTML(
+        "beforeend",
+        `
+        <input type="email" class="correo" name="correos/${i}" value="${res.correos[i]}" required>
+        `
+      );
+    }
+  }
+
+  let socials = document.querySelector("#groupSocials");
+  socials.innerHTML = "";
+  for(let i in res.socials){
+    i = Number(i);
+    if(i === 0) {
+      socials.insertAdjacentHTML(
+        "beforeend",
+        `
+        <label>Redes Sociales (Ingresa 1 por campo)</label>
+        <input type="url" class="sociall" name="socials" value="${res.socials[i]}" required>
+        `
+      )
+    } else {
+      socials.insertAdjacentHTML(
+        "beforeend",
+        `
+        <input type="url" class="sociall" name="socials/${i}" value="${res.socials[i]}" required>
+        `
+      );
+    }
+  }
+
+  let about = document.querySelector("#about");
+  about.value = res.about;
+
+  let hobbies = document.querySelector("#groupHobbies");
+  hobbies.innerHTML = "";
+  for(let i in res.hobbies){
+    i = Number(i);
+    if(i === 0) {
+      hobbies.insertAdjacentHTML(
+        "beforeend",
+        `
+        <label>Hobbie (Ingresa 1 por campo)</label>
+        <input type="text" class="hobbies" name="hobbies" value="${res.hobbies[i]}" required>
+        `
+      )
+    } else {
+      hobbies.insertAdjacentHTML(
+        "beforeend",
+        `
+        <input type="text" class="hobbies" name="hobbies/${i}" value="${res.hobbies[i]}" required>
+        `
+      );
+    }
+  }
+
+  let experiencia = document.querySelector("#groupExperiences");
+  experiencia.innerHTML = "";
+  for(let i in res.experiences){
+    i = Number(i);
+    if(i === 0) {
+      experiencia.insertAdjacentHTML(
+        "beforeend",
+        `
+        <label>Experiencia (Ingresa 1 por campo)</label>
+        <input type="text" class="experience" name="experiences" value="${res.experiences[i]}" required>
+        `
+      )
+    } else {
+      experiencia.insertAdjacentHTML(
+        "beforeend",
+        `
+        <input type="text" class="experience" name="experiences/${i}" value="${res.experiences[i]}" required>
+        `
+      );
+    }
+  }
+
+  let skill = document.querySelector("#groupSkills");
+  skill.innerHTML = "";
+  for(let i in res.skills){
+    i = Number(i);
+    if(i === 0) {
+      skill.insertAdjacentHTML(
+        "beforeend",
+        `
+        <label>Skill/Lenguaje de programacion (Ingresa 1 por campo)</label>
+        <input type="text" class="skill" name="skills" value="${res.skills[i]}" required>
+        `
+      )
+    } else {
+      skill.insertAdjacentHTML(
+        "beforeend",
+        `
+        <input type="text" class="skill" name="skills/${i}" value="${res.skills[i]}" required>
+        `
+      );
+    }
+  }
+
+  let idioma = document.querySelector("#groupIdiomas");
+  idioma.innerHTML = "";
+  for(let i in res.idiomas){
+    i = Number(i);
+    if(i === 0) {
+      idioma.insertAdjacentHTML(
+        "beforeend",
+        `
+        <label>Idioma (Ingresa 1 por campo)</label>
+        <input type="text" class="idioma" name="idiomas" value="${res.idiomas[i]}" required>
+        `
+      )
+    } else {
+      idioma.insertAdjacentHTML(
+        "beforeend",
+        `
+        <input type="text" class="idioma" name="idiomas/${i}" value="${res.idiomas[i]}" required>
+        `
+      );
+    }
+  }
+
+  let imagen = document.querySelector("input[name=imgs]");
+  imagen.value = res.imgs;
+};
+
+let renderPortafolio = ()=> {
+  let btnRender = document.querySelectorAll(".btnRender");
+  let renderSpace = document.querySelector("#renderPort");
+
+  btnRender.forEach(element => {
+    
+    element.addEventListener("click", async () => {
+      let profile = await getOne({endPoint, cedula: Number(element.getAttribute("datacc"))});
+      console.log(profile);
+
+      renderSpace.innerHTML = ""
+      renderSpace.insertAdjacentHTML(
+        "beforeend",
+        `
+        <!-- Header -->
+        <header class="banner">
+          <div class="container_16">
+            <figure>
+              <img src="${profile.imgs}" alt="Foto perfil">
+            </figure>
+            <hgroup>
+              <h1 class="fadeInDown">${profile.name}</h1>
+              <h2 class="fadeInUp">Curriculum vitae</h2>
+              <img id="cv" class="fadeInUp" src="https://cdn-icons-png.flaticon.com/512/909/909314.png" alt="cv">
+            </hgroup>
+          </div>
+        </header>
+        
+        <!-- Main section -->
+        <section role="main" class="container_16">
+
+        <!-- ABOUT ME -->
+          <div class="grid_16 experiences appear">
+            <img class="icon" src="https://static.thenounproject.com/png/992984-200.png" alt="sobre mí">
+            <h3>Sobre mí</h3>
+            <ul> 
+            <li>${profile.about}</li>
+            </ul>
+          </div>
+
+            <!-- knowledge -->
+            <div class="grid_8 knowledge fadeInRight">
+              <img class="icon" src="https://e7.pngegg.com/pngimages/711/803/png-clipart-address-book-computer-icons-font-awesome-contact-icon-text-logo.png" alt="Informacion">
+              <h3>Informacion/Contacto</h3>
+              <ul class="values">
+              <li>Cumpleanios (Day/Month): ${profile.fechaNacimiento.split("-")[2]+"/"+profile.fechaNacimiento.split("-")[1]}</li>
+              <li>Ciudad: ${profile.ciudad}</li>
+              <li id="listTelefono">
+                <p>Telefono(s):</p>
+              </li>
+              <li id="listCorreo">
+                <p>Correo(s):</p>
+              </li>
+              <li id="listSocials">
+                <p>Redes Sociales:</p>
+              </li>
+              </ul>
+            </div>
+          </div>
+        
+          <!-- knowledge -->
+            <div class="grid_8 knowledge fadeInRight">
+              <img class="icon" src="https://cdn-icons-png.flaticon.com/512/2572/2572708.png" alt="Conocimientos">
+              <h3>Skills/Lenguajes</h3>
+              <ul id="listSkill" class="values">
+              </ul>
+            </div>
+          </div>
+
+          <!-- Experience -->
+          <div class="grid_16 experiences appear">
+            <img class="icon" src="https://e7.pngegg.com/pngimages/219/692/png-clipart-computer-icons-icon-design-businessperson-desk-work-experience-text-logo.png" alt="Experiencias">
+            <h3>Experiencias</h3>
+            <ul id="listExperiencia"> 
+            </ul>
+          </div>
+
+          <!-- IDIOMAS -->
+          <div class="grid_16 experiences appear">
+            <img class="icon" src="https://w7.pngwing.com/pngs/626/640/png-transparent-translation-foreign-language-language-interpretation-language-localisation-others-english-text-logo.png" alt="Idiomas">
+            <h3>Idiomas</h3>
+            <ul id="listIdiomas">
+            </ul>
+          </div>
+
+          <!-- HOBBIES -->
+          <div class="grid_16 experiences appear">
+            <img class="icon" src="https://cdn-icons-png.flaticon.com/512/2853/2853408.png" alt="Hobbies">
+            <h3>Hobbies</h3>
+            <ul id="listHobbies">
+            </ul>
+          </div>
+        </section>
+        `
+      );
+
+      let listTelefono = document.querySelector("#listTelefono");
+      profile.telefonos.forEach(element => {
+        listTelefono.insertAdjacentHTML(
+          "beforeend",
+          `
+          <li>${element}</li>
+          `
+        )
+      });
+
+      let listCorreo = document.querySelector("#listCorreo");
+      profile.correos.forEach(element => {
+        listCorreo.insertAdjacentHTML(
+          "beforeend",
+          `
+          <li>${element}</li>
+          `
+        )
+      });
+
+      let listSocials = document.querySelector("#listSocials");
+      profile.socials.forEach(element => {
+        listSocials.insertAdjacentHTML(
+          "beforeend",
+          `
+          <li><a href="${element}" target="_blank">${element}</a></li>
+          `
+        )
+      });
+
+      let listSkill = document.querySelector("#listSkill");
+      profile.skills.forEach(element => {
+        listSkill.insertAdjacentHTML(
+          "beforeend",
+          `
+          <li>${element}</li>
+          `
+        )
+      });
+
+      let listExperiencia = document.querySelector("#listExperiencia");
+      profile.experiences.forEach(element => {
+        listExperiencia.insertAdjacentHTML(
+          "beforeend",
+          `
+          <li>${element}</li>
+          `
+        )
+      });
+
+      let listIdiomas = document.querySelector("#listIdiomas");
+      profile.idiomas.forEach(element => {
+        listIdiomas.insertAdjacentHTML(
+          "beforeend",
+          `
+          <li>${element}</li>
+          `
+        )
+      });
+
+      let listHobbies = document.querySelector("#listHobbies");
+      profile.hobbies.forEach(element => {
+        listHobbies.insertAdjacentHTML(
+          "beforeend",
+          `
+          <li>${element}</li>
+          `
+        )
+      });
+
+    });
+  });
 };

@@ -41,7 +41,7 @@
     },
     {
       "name": "Santiago",
-      "cedula": 1098764527,
+      "cedula": 11111,
       "fechaNacimiento": "1980-10-10",
       "ciudad": "Santa Marta",
       "telefonos": [
@@ -79,7 +79,7 @@
       "id": 2
     },
     {
-      "name": "Santiago",
+      "name": "Marisol",
       "cedula": 1098764527,
       "fechaNacimiento": "1980-10-10",
       "ciudad": "Santa Marta",
@@ -116,6 +116,36 @@
       ],
       "imgs": "https://media.gq.com.mx/photos/609c0fdeee4372271f0b9056/1:1/w_2000,h_2000,c_limit/salir%20guapo%20en%20fotos-605380757.jpg",
       "id": 3
+    },
+    {
+      "name": "Daniel Ortiz Landazabal",
+      "cedula": 112233,
+      "fechaNacimiento": "2023-10-05",
+      "ciudad": "Bucaramanga",
+      "telefonos": [
+        11111
+      ],
+      "correos": [
+        "daniel@gmail.com"
+      ],
+      "socials": [
+        "https://github.com/Daniel"
+      ],
+      "about": "asdasd",
+      "hobbies": [
+        "jugar"
+      ],
+      "experiences": [
+        "Lider"
+      ],
+      "skills": [
+        "Java"
+      ],
+      "idiomas": [
+        "Espanol"
+      ],
+      "imgs": "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+      "id": 4
     }
   ]
 }
