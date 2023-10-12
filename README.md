@@ -16,13 +16,20 @@ Además guardarlas en tu propia base de datos con json-server.
 ## Capturas de Pantalla
 
 - Página principal.
+
 ![Captura de pantalla 1](./imgs/ss1.png)
+
 - Formulario.
+
 ![Captura de pantalla 2](./imgs/ss2.png)
 ![Captura de pantalla 2](./imgs/ss3.png)
+
 - Tabla de registros.
+
 ![Captura de pantalla 3](./imgs/ss4.png)
+
 - Portafolio generado.
+
 ![Captura de pantalla 4](./imgs/ss5.png)
 
 ## Tecnologías Utilizadas
@@ -94,24 +101,33 @@ Luego de tener instalado lo anterior:
 # Como funciona la pagina
 
 1. Al abrir el archivo `index.html` encontraremos nuestra pagina asi:
+
 ![Guia 1](./imgs/guia1.png)
+
 En esta parte lo que debemos hacer es dar click en el boton `Registrar/Listar portafolio` para poder ver el formulario.
 
 2. Luego de darle click al boton, veremos nuestro formulario asi:
+
 ![Guia 2](./imgs/guia2.png)
+
 ![Guia 3](./imgs/guia3.png)
+
 Aca debemos ingresar nuestra informacion, para que al final dando click en el boton `REGISTRAR` guardemos nuestro perfil en la base de datos.
 Tambien podemos agregar mas campos en los botones [(+) Boton].
 
 3. Debajo del formulario encontramos la tabla de registros.
+
 ![Guia 4](./imgs/guia4.png)
+
 Aca encontramos informacion principal de cada registro realizado.
 Ademas encontramos 3 botones de acciones que nos permiten, eliminar, editar y mostrar.
 
 4. Si damos click en el boton de `EDITAR`, el formulario cargara la informacion que fue registrada inicialmente, y nos permitira editarla.
+
 ![Guia 5](./imgs/guia5.png)
 
 5. Y por ultimo si damos click en el boton de `MOSTRAR` se generara un portafolio del perfil
+
 ![Guia 6](./imgs/guia6.png)
 
 
